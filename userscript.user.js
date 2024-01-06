@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitch disable Chat on to many chatter
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Adjust chat visibility based on user-defined Twitch viewer thresholds.
 // @author       KleinerCodeDrago
 // @match        https://www.twitch.tv/*
