@@ -7,6 +7,8 @@
 // @match        https://www.twitch.tv/*
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @updateURL    https://github.com/KleinerCodeDrago/TwitchDisableChatOnToManyChatter/raw/master/userscript.js
+// @downloadURL  https://github.com/KleinerCodeDrago/TwitchDisableChatOnToManyChatter/raw/master/userscript.js
 // ==/UserScript==
 
 (function() {
