@@ -6,7 +6,7 @@ Adjusts chat visibility based on user-defined Twitch viewer thresholds.
 
 Click the button below to install the userscript.
 
-[[Install Userscript]](https://github.com/KleinerCodeDrago/TwitchDisableChatOnToManyChatter/raw/master/userscript.js)
+[[Install Userscript]](https://github.com/KleinerCodeDrago/TwitchDisableChatOnToManyChatter/raw/master/userscript.user.js)
 
 ## Usage
 
