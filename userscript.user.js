@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitch disable Chat on to many chatter
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  Adjust chat visibility based on user-defined Twitch viewer thresholds.
 // @author       KleinerCodeDrago
 // @match        https://www.twitch.tv/*
@@ -28,11 +28,11 @@
         const container = document.createElement('div');
         container.style.position = 'fixed';
         container.style.bottom = '20px';
-        container.style.left = '20px';  
-        container.style.zIndex = '10000'; 
-        container.style.backgroundColor = 'rgba(0, 0, 0, 0.7)'; 
+        container.style.left = '20px';
+        container.style.zIndex = '10000';
+        container.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
         container.style.padding = '10px';
-        container.style.borderRadius = '5px'; 
+        container.style.borderRadius = '5px';
 
         const tooManyButton = document.createElement('button');
         tooManyButton.textContent = 'Too Many';
@@ -120,38 +120,54 @@
             const channelName = getChannelName();
             const settings = channelSettings[channelName];
 
-            if (settings && userCounterValue > settings.tooMany) {
-                clickButtonIfExpanded();
-            } else if (settings && userCounterValue <= settings.acceptable) {
-                clickButtonIfCollapsed();
+            if (settings) {
+                if (userCounterValue > settings.tooManyAverage) {
+                    console.log(`User count (${userCounterValue}) is above 'tooMany' threshold (${settings.tooManyAverage}), collapsing chat.`);
+                    clickButtonIfExpanded();
+                } else if (userCounterValue <= settings.acceptableAverage) {
+                    console.log(`User count (${userCounterValue}) is below or equal to 'acceptable' threshold (${settings.acceptableAverage}), expanding chat.`);
+                    clickButtonIfCollapsed();
+                } else {
+                    console.log(`User count (${userCounterValue}) is within thresholds, no action needed.`);
+                }
+            } else {
+                console.log(`No settings found for channel ${channelName}.`);
             }
         } else {
             console.log('User counter element not found.');
         }
     }
 
+
     function clickButtonIfExpanded() {
         const buttonElement = document.querySelector('button[data-a-target="right-column__toggle-collapse-btn"]');
-        const surroundingDivElement = buttonElement && buttonElement.closest('.toggle-visibility__right-column');
-        if (buttonElement && surroundingDivElement && surroundingDivElement.classList.contains('toggle-visibility__right-column--expanded')) {
-            buttonElement.click();
-            console.log('Button clicked (expanded).');
+        if (buttonElement) {
+            const surroundingDivElement = buttonElement.closest('.toggle-visibility__right-column');
+            if (surroundingDivElement && surroundingDivElement.classList.contains('toggle-visibility__right-column--expanded')) {
+                buttonElement.click();
+                console.log('Button clicked (expanded).');
+            } else {
+                console.log('Button found but chat is not expanded.');
+            }
         } else {
-            console.log('Button element not found or not in the expanded state.');
+            console.log('Chat toggle button not found (expanded check).');
         }
     }
 
     function clickButtonIfCollapsed() {
         const buttonElement = document.querySelector('button[data-a-target="right-column__toggle-collapse-btn"]');
-        const surroundingDivElement = buttonElement && buttonElement.closest('.toggle-visibility__right-column');
-        if (buttonElement && surroundingDivElement && !surroundingDivElement.classList.contains('toggle-visibility__right-column--expanded')) {
-            buttonElement.click();
-            console.log('Button clicked (collapsed).');
+        if (buttonElement) {
+            const surroundingDivElement = buttonElement.closest('.toggle-visibility__right-column');
+            if (surroundingDivElement && !surroundingDivElement.classList.contains('toggle-visibility__right-column--expanded')) {
+                buttonElement.click();
+                console.log('Button clicked (collapsed).');
+            } else {
+                console.log('Button found but chat is already collapsed.');
+            }
         } else {
-            console.log('Button element not found or not in the collapsed state.');
+            console.log('Chat toggle button not found (collapsed check).');
         }
     }
-
     init();
     setInterval(urlChanged, 5000);
 })();
